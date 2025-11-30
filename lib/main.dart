@@ -1,5 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:pos_app/services/supabase_config.dart';
+import 'package:pos_app/screens/main_screen.dart';
+import 'package:pos_app/screens/Login/splash_screen.dart';
+
+import 'package:pos_app/screens/cashier/order_screen.dart';
+import 'package:pos_app/screens/product/product_screen.dart';
+import 'package:pos_app/screens/stock/stock_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -14,9 +21,15 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        body: Center(child: Text('Supabase Connected')),
+      title: 'Shee Bouquete',
+      theme: ThemeData(
+        primarySwatch: Colors.pink,
+        textTheme: GoogleFonts.poppinsTextTheme(),
       ),
+      //home: const SplashScreen(),
+      //home: const CashierScreen(),
+      //home: const ProductScreen(),
+      home: const StockScreen(),
     );
   }
 }

@@ -1,55 +1,87 @@
+import 'dart:io';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:pos_app/services/supabase_config.dart';
 
 class ProductService {
-  final SupabaseClient client = SupabaseConfig.client;
+  final supabase = Supabase.instance.client;
 
-  //Tambah produk
+  // =======================
+  // GET CATEGORIES
+  // =======================
+  Future<List<Map<String, dynamic>>> getCategories() async {
+    final data = await supabase.from('categories').select();
+    return data;
+  }
+
+  // =======================
+  // GET PRODUCTS
+  // =======================
+  Future<List<Map<String, dynamic>>> getProducts() async {
+    final data = await supabase
+        .from('products')
+        .select('product_id, name, price, stock, image, category_id, categories(name)');
+    return data;
+  }
+
+  // =======================
+  // UPLOAD IMAGE
+  // =======================
+  Future<String?> uploadImage(File file) async {
+    final fileName = 'product_${DateTime.now().millisecondsSinceEpoch}.jpg';
+
+    await supabase.storage.from('product_images').upload(
+      fileName,
+      file,
+      fileOptions: const FileOptions(cacheControl: '3600', upsert: false),
+    );
+
+    final imageUrl = supabase.storage.from('product_images').getPublicUrl(fileName);
+    return imageUrl;
+  }
+  
+
+  // =======================
+  // ADD PRODUCT
+  // =======================
   Future<void> addProduct({
     required String name,
     required int price,
-    required int categoryId,
     required int stock,
-    String? image,
+    required int categoryId,
+    String? imageUrl,
   }) async {
-    await client.from('products').insert({
+    await supabase.from('products').insert({
       'name': name,
       'price': price,
-      'category_id': categoryId,
       'stock': stock,
-      'image': image,
+      'category_id': categoryId,
+      'image': imageUrl,
     });
   }
 
-  //Ambil semua produk
-  Future<List<Map<String, dynamic>>> getAllProducts() async {
-    final response = await client.from('products').select();
-    return List<Map<String, dynamic>>.from(response);
-  }
-
-  //Update produk
+  // =======================
+  // UPDATE PRODUCT
+  // =======================
   Future<void> updateProduct({
     required int productId,
-    String? name,
-    int? price,
-    int? categoryId,
-    int? stock,
-    String? image,
+    required String name,
+    required int price,
+    required int stock,
+    required int categoryId,
+    String? imageUrl,
   }) async {
-    final updates = {
-      if (name != null) 'name': name,
-      if (price != null) 'price': price,
-      if (categoryId != null) 'category_id': categoryId,
-      if (stock != null) 'stock': stock,
-      if (image != null) 'image': image,
-      'update_id': DateTime.now().toIso8601String(),
-    };
-
-    await client.from('products').update(updates).eq('product_id', productId);
+    await supabase.from('products').update({
+      'name': name,
+      'price': price,
+      'stock': stock,
+      'category_id': categoryId,
+      'image': imageUrl,
+    }).eq('product_id', productId);
   }
 
-  //Hapus produk
-  Future<void> deleteProduct(int productId) async {
-    await client.from('products').delete().eq('product_id', productId);
+  // =======================
+  // DELETE
+  // =======================
+  Future<void> deleteProduct(int id) async {
+    await supabase.from('products').delete().eq('product_id', id);
   }
 }

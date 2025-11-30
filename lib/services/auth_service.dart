@@ -1,45 +1,37 @@
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class AuthService {
-  final supabase = Supabase.instance.client;
+  final SupabaseClient _supabase = Supabase.instance.client;
 
-  //Register
-  Future<void> signUp(String name, String email, String password) async {
-    final existingUser = await supabase //cek apakah email sudah terdaftar
-        .from('users')
-        .select()
-        .eq('email', email)
-        .maybeSingle();
+  // Login
+  Future<User?> login({required String email, required String password}) async {
+    final res = await _supabase.auth.signInWithPassword(
+      email: email,
+      password: password,
+    );
+    return res.user;
+  }
 
-    if (existingUser != null) {
-      throw Exception('Email sudah terdaftar.');
-    }
-    await supabase.from('users').insert({ //tambah data user ke tabel
+  // Register
+  Future<User?> register({
+    required String name,
+    required String email,
+    required String password,
+    required String role,
+  }) async {
+    // 1️⃣ Daftar user di Supabase Auth
+    final res = await _supabase.auth.signUp(email: email, password: password);
+    final user = res.user;
+    if (user == null) return null;
+
+    // 2️⃣ Masukkan data ke tabel 'users'
+    await _supabase.from('users').insert({
+      'user_id': user.id,
       'name': name,
+      'role': role,
       'email': email,
-      'password': password,
-      'role': 'officer',
     });
-  }
 
-  //Login
-  Future<Map<String, dynamic>?> signIn(String email, String password) async {
-    final response = await supabase
-        .from('users')
-        .select()
-        .eq('email', email)
-        .eq('password', password)
-        .maybeSingle();
-
-    if (response == null) {
-      throw Exception('Email atau password salah.');
-    }
-
-    return response;
-  }
-
-  //Logout
-  Future<void> signOut() async {
-    print('User signed out');
+    return user;
   }
 }
