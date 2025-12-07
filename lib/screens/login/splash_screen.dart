@@ -10,7 +10,6 @@ class SplashScreen extends StatelessWidget {
       backgroundColor: Colors.white, 
       body: GestureDetector(
         onTap: () {
-          // Fungsi dijalankan saat di klik
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(

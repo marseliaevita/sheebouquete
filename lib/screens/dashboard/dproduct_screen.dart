@@ -10,7 +10,7 @@ class DProductScreen extends StatelessWidget {
       body: SafeArea(
         child: Column(
           children: [
-           // ---------------- TOPBAR HEADER ----------------
+           // HEADER
             Container(
               height: 100,
               padding: const EdgeInsets.only(top: 60, left: 18, right: 18),
@@ -68,7 +68,7 @@ class DProductScreen extends StatelessWidget {
     );
   }
 
-  // ---------------- PRODUCT ITEM ----------------
+  // LIST PRODUCT
   Widget _buildProductItem() {
     return Container(
       width: 360,
@@ -82,7 +82,7 @@ class DProductScreen extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          // NAMA PRODUK
+          // Nama Product
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -106,7 +106,7 @@ class DProductScreen extends StatelessWidget {
             ],
           ),
 
-          // QTY
+          // Qyt
           const Text(
             "11",
             style: TextStyle(

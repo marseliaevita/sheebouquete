@@ -26,38 +26,40 @@ class CardCheckout extends StatelessWidget {
     return Slidable(
       key: ValueKey(name),
 
-      // ================= DELETE SLIDE BUTTON =================
+      // DELETE SLIDE
       endActionPane: ActionPane(
         motion: const StretchMotion(),
         extentRatio: 120 / 365,
         children: [
-          Builder(builder: (context) {
-            return Container(
-              margin: const EdgeInsets.only(bottom: 16),
-              padding: const EdgeInsets.all(12),
-              height: 116,
-              width: 120,
-              decoration: BoxDecoration(
-                color: const Color(0xFFE1C5B0).withOpacity(0.88),
-                borderRadius: BorderRadius.circular(15),
-              ),
-              child: InkWell(
-                onTap: onDelete,
-                borderRadius: BorderRadius.circular(15),
-                child: const Center(
-                  child: Icon(
-                    Icons.delete,
-                    size: 35,
-                    color: Color(0xFF630E2B),
+          Builder(
+            builder: (context) {
+              return Container(
+                margin: const EdgeInsets.only(bottom: 16),
+                padding: const EdgeInsets.all(12),
+                height: 116,
+                width: 120,
+                decoration: BoxDecoration(
+                  color: const Color(0xFFE1C5B0).withOpacity(0.88),
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                child: InkWell(
+                  onTap: onDelete,
+                  borderRadius: BorderRadius.circular(15),
+                  child: const Center(
+                    child: Icon(
+                      Icons.delete,
+                      size: 35,
+                      color: Color(0xFF630E2B),
+                    ),
                   ),
                 ),
-              ),
-            );
-          }),
+              );
+            },
+          ),
         ],
       ),
 
-      // ================= MAIN CARD =================
+      // CARD
       child: Container(
         height: 116,
         margin: const EdgeInsets.only(bottom: 16),
@@ -79,52 +81,59 @@ class CardCheckout extends StatelessWidget {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            // IMAGE ============================
+            // IMAGE
             ClipRRect(
               borderRadius: BorderRadius.circular(12),
-              child: Image.asset(
-                image,
-                width: 70,
-                height: 70,
-                fit: BoxFit.cover,
-              ),
+              child: image.startsWith("http")
+                  ? Image.network(
+                      image,
+                      width: 70,
+                      height: 70,
+                      fit: BoxFit.cover,
+                    )
+                  : Image.asset(
+                      image,
+                      width: 70,
+                      height: 70,
+                      fit: BoxFit.cover,
+                    ),
             ),
 
             const SizedBox(width: 14),
 
-            // NAME + PRICE =====================
+            // NAME + PRICE
             Expanded(
               child: Padding(
-    padding: const EdgeInsets.only(bottom: 8),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    name,
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xFF630E2B),
+                padding: const EdgeInsets.only(bottom: 8),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      name,
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFF630E2B),
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    "Rp $price",
-                    style: const TextStyle(
-                      fontSize: 14,
-                      color: Colors.grey,
-                      fontWeight: FontWeight.w600,
+                    const SizedBox(height: 4),
+                    Text(
+                      "Rp $price",
+                      style: const TextStyle(
+                        fontSize: 14,
+                        color: Colors.grey,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
-          ),
 
-            // QTY + TOTAL ======================
+            // QTY + TOTAL
             Padding(
-              padding: const EdgeInsets.only(top: 20), 
+              padding: const EdgeInsets.only(top: 20),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
@@ -167,7 +176,7 @@ class CardCheckout extends StatelessWidget {
     );
   }
 
-  // ================= QTY BUTTON =================
+  // QTY BUTTON
   Widget _qtyButton(IconData icon, VoidCallback onTap) {
     return Container(
       decoration: BoxDecoration(
@@ -186,7 +195,7 @@ class CardCheckout extends StatelessWidget {
   }
 }
 
-// ============================ SUMMARY CARD ===============================
+// SUMARY CARD
 class SummaryCard extends StatelessWidget {
   final int subtotal;
   final int discount;
@@ -208,9 +217,7 @@ class SummaryCard extends StatelessWidget {
       margin: const EdgeInsets.symmetric(horizontal: 16),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(14),
-        border: Border.all(
-          color: const Color(0x85B05B3B),
-        ),
+        border: Border.all(color: const Color(0x85B05B3B)),
       ),
       child: Column(
         children: [

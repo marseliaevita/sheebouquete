@@ -10,7 +10,7 @@ class CustomerActiveScreen extends StatelessWidget {
       body: SafeArea(
         child: Column(
           children: [
-            // --------------TOPBAR HEADER------------
+            // HEADER
             Container(
               height: 100,
               padding: const EdgeInsets.only(top: 60, left: 18, right: 18),
@@ -67,7 +67,7 @@ class CustomerActiveScreen extends StatelessWidget {
     );
   }
 
-  // ---------------- LIST ITEM WIDGET ----------------
+  // LIST
   Widget _buildCustomerItem() {
     return Container(
       width: 360,

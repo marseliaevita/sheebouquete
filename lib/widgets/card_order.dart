@@ -1,29 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-// ------------------ CUSTOMER CARD 
+// CUSTOMER CARD
 class CardCustomer extends StatelessWidget {
   final String name;
 
-  const CardCustomer({
-    super.key,
-    required this.name,
-  });
+  const CardCustomer({super.key, required this.name});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 356,
+      width: double.infinity,
       height: 58,
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.symmetric(horizontal: 16),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(15),
-        border: Border.all(
-          color: Colors.black.withOpacity(0.3),
-          width: 1,
-        ),
+        border: Border.all(color: Colors.black.withOpacity(0.3), width: 1),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.05),
@@ -44,11 +38,12 @@ class CardCustomer extends StatelessWidget {
     );
   }
 }
+
 List<Map<String, String>> dummyCustomers = [
   {"name": "Alice Johnson"},
 ];
 
-//-----------------------  CARD
+// Card
 class CardOrder extends StatelessWidget {
   final String name;
   final String image;
@@ -86,15 +81,17 @@ class CardOrder extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          // IMAGE
+          // Image
           ClipRRect(
             borderRadius: BorderRadius.circular(12),
-            child: Image.asset(image, width: 70, height: 70, fit: BoxFit.cover),
+            child: image.startsWith("http")
+                ? Image.network(image, width: 70, height: 70, fit: BoxFit.cover)
+                : Image.asset(image, width: 70, height: 70, fit: BoxFit.cover),
           ),
 
           const SizedBox(width: 14),
 
-          // NAME + PRICE
+          // Name + Price
           Expanded(
             child: Padding(
               padding: const EdgeInsets.only(bottom: 8),
@@ -124,12 +121,12 @@ class CardOrder extends StatelessWidget {
             ),
           ),
 
-          // TOTAL QYT
+          // Qyt
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              // Qty dalam card kecil
+              // Qty card
               Container(
                 padding: const EdgeInsets.symmetric(
                   horizontal: 10,
@@ -164,14 +161,13 @@ class CardOrder extends StatelessWidget {
   }
 }
 
-//-----------------  SUMMARY
+// SUMMARY
 class SummaryCard extends StatefulWidget {
   final int subtotal;
   final int discount;
   final VoidCallback onCashTap;
   final VoidCallback onQrisTap;
   final String selectedPayment;
-
 
   const SummaryCard({
     super.key,
@@ -189,7 +185,7 @@ class SummaryCard extends StatefulWidget {
 class _SummaryCardState extends State<SummaryCard> {
   final formatCurrency = NumberFormat("#,###", "id_ID");
 
-  String selectedPayment = ""; // "" = belum pilih, "cash" / "qris"
+  String selectedPayment = ""; 
 
   @override
   Widget build(BuildContext context) {

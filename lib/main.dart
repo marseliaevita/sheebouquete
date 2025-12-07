@@ -2,11 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pos_app/services/supabase_config.dart';
 import 'package:pos_app/screens/main_screen.dart';
-import 'package:pos_app/screens/Login/splash_screen.dart';
-
-import 'package:pos_app/screens/cashier/order_screen.dart';
-import 'package:pos_app/screens/product/product_screen.dart';
-import 'package:pos_app/screens/stock/stock_screen.dart';
+import 'package:pos_app/screens/login/login_screen.dart';
+import 'package:pos_app/screens/login/splash_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -26,10 +23,12 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.pink,
         textTheme: GoogleFonts.poppinsTextTheme(),
       ),
-      //home: const SplashScreen(),
-      //home: const CashierScreen(),
-      //home: const ProductScreen(),
-      home: const StockScreen(),
+      initialRoute: '/splash',
+      routes: {
+        '/splash': (context) => const SplashScreen(),
+        '/login': (context) => const LoginScreen(),
+        '/main': (context) => const MainScreen(),
+      },
     );
   }
 }

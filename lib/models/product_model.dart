@@ -1,28 +1,25 @@
 class Product {
-  final int id;
+  final int productId; 
   final String name;
   final int price;
+  final String image;
   final int stock;
-  final String? image;
-  final int? categoryId;
 
   Product({
-    required this.id,
+    required this.productId,
     required this.name,
     required this.price,
+    required this.image,
     required this.stock,
-    this.image,
-    this.categoryId,
   });
 
-  factory Product.fromJson(Map<String, dynamic> json) {
+  factory Product.fromMap(Map<String, dynamic> map) {
     return Product(
-      id: json['product_id'],
-      name: json['name'],
-      price: json['price'],
-      stock: json['stock'],
-      image: json['image'],
-      categoryId: json['category_id'],
+      productId: map['product_id'],
+      name: map['name'],
+      price: map['price'],
+      image: map['image'] ?? '',
+      stock: map['stock'] ?? 0,
     );
   }
 }

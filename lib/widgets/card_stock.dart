@@ -6,7 +6,7 @@ class CardStock extends StatelessWidget {
   final int stock;
   final VoidCallback? onEdit;
   final VoidCallback? onHistory;
-  final bool showReadyCard;
+  final bool showStockStatus;
   final bool showActions;
 
   const CardStock({
@@ -16,9 +16,38 @@ class CardStock extends StatelessWidget {
     required this.stock,
     this.onEdit,
     this.onHistory,
-    this.showReadyCard = true,
+    this.showStockStatus = true,
     this.showActions = true,
   });
+
+  // Label Stock
+  Widget _buildStockBadge() {
+    final bool isLow = stock <= 3;
+
+    if (!showStockStatus) return const SizedBox.shrink();
+
+    return Container(
+      width: 49,
+      height: 16,
+      decoration: BoxDecoration(
+        color: isLow ? const Color(0xFFFDE7E7) : const Color(0xFFD7F8D8),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: isLow ? const Color(0xFF9B1A1A) : const Color(0xFF026C09),
+          width: 1,
+        ),
+      ),
+      alignment: Alignment.center,
+      child: Text(
+        isLow ? "Low" : "Ready",
+        style: TextStyle(
+          fontSize: 10,
+          color: isLow ? const Color(0xFF9B1A1A) : Colors.green,
+          fontWeight: FontWeight.w600,
+        ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +74,7 @@ class CardStock extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // NAMA PRODUK
+                  // Nama Product
                   Text(
                     name,
                     style: const TextStyle(
@@ -57,7 +86,7 @@ class CardStock extends StatelessWidget {
 
                   const SizedBox(height: 4),
 
-                  // STOCK
+                  // Stock
                   Text(
                     "Stock: $stock",
                     style: const TextStyle(fontSize: 14, color: Colors.black54),
@@ -65,26 +94,8 @@ class CardStock extends StatelessWidget {
 
                   const SizedBox(height: 6),
 
-                  // LABEL READY
-                  if (showReadyCard)
-                    Container(
-                      width: 49,
-                      height: 16,
-                      decoration: BoxDecoration(
-                        color: const Color(0xFFD7F8D8),
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: Color(0xFF026C09), width: 1),
-                      ),
-                      alignment: Alignment.center, // biar teks di tengah
-                      child: const Text(
-                        "Ready",
-                        style: TextStyle(
-                          fontSize: 10, // turun sedikit karena badge kecil
-                          color: Colors.green,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ),
+                  // Label Ready/Low
+                _buildStockBadge(),
                 ],
               ),
             ),
@@ -123,3 +134,5 @@ class CardStock extends StatelessWidget {
     );
   }
 }
+
+

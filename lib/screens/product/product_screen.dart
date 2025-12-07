@@ -58,7 +58,6 @@ class _ProductScreenState extends State<ProductScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
-        // UI TETAP SAMA
         child: Padding(
           padding: const EdgeInsets.only(top: 20, left: 18, right: 18),
           child: Column(
@@ -66,7 +65,7 @@ class _ProductScreenState extends State<ProductScreen> {
             children: [
               const SizedBox(height: 10),
 
-              // ================= SEARCH BAR =================
+              // SEARCH 
               Row(
                 children: [
                   Expanded(
@@ -98,7 +97,7 @@ class _ProductScreenState extends State<ProductScreen> {
                   ),
                   const SizedBox(width: 12),
 
-                  // ADD BUTTON
+                  // ADD 
                   Container(
                     width: 60,
                     height: 60,
@@ -124,7 +123,7 @@ class _ProductScreenState extends State<ProductScreen> {
 
               const SizedBox(height: 20),
 
-              // ================= CATEGORY FILTER =================
+              //CATEGORY 
               SizedBox(
                 height: 40,
                 child: ListView.separated(
@@ -161,7 +160,7 @@ class _ProductScreenState extends State<ProductScreen> {
 
               const SizedBox(height: 20),
 
-              // ================= PRODUCT GRID =================
+              // PRODUCT GRID
               Expanded(
                 child: isLoading
                     ? const Center(
@@ -190,7 +189,7 @@ class _ProductScreenState extends State<ProductScreen> {
     );
   }
 
-  // PRODUCT CARD 
+  // PRODUCT 
   Widget _buildProductCard(Map<String, dynamic> p) {
     return Container(
       decoration: BoxDecoration(

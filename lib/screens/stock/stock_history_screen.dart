@@ -25,7 +25,7 @@ class StockHistoryScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // ---------------- HEADER ----------------
+              // HEADER 
               Container(
                 height: 100,
                 padding: const EdgeInsets.only(top: 60, left: 18, right: 18),
@@ -60,20 +60,20 @@ class StockHistoryScreen extends StatelessWidget {
 
               const SizedBox(height: 35),
 
-              // ---------- PRODUCT CARD ----------
+              // PRODUCT CARD 
               CardStock(
                 imageUrl: imageUrl,
                 name: name,
                 stock: stock,
                 onEdit: null,
                 onHistory: null,
-                showReadyCard: false, 
+                showStockStatus: false, 
                 showActions: false,  
               ),
 
               const SizedBox(height: 10),
 
-              // ---------- LIST HISTORY ----------
+              // LIST HISTORY 
               ...historyData.map((item) {
                 return _buildHistoryCard(item["date"], item["items"]);
               }).toList(),
@@ -84,7 +84,7 @@ class StockHistoryScreen extends StatelessWidget {
     );
   }
 
-  // ---------- CARD HISTORY PER TANGGAL ----------
+  //CARD HISTORY PER TANGGAL 
   Widget _buildHistoryCard(String date, List<Map<String, dynamic>> items) {
     return Container(
       margin: const EdgeInsets.only(bottom: 18),

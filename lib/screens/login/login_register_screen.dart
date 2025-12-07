@@ -24,7 +24,7 @@ class LoginRegisterScreen extends StatelessWidget {
               ),
             ),
 
-            // Tombol Login (Card)
+            // Login
             Positioned(
               left: 61,
               top: 438,
@@ -46,7 +46,6 @@ class LoginRegisterScreen extends StatelessWidget {
                         builder: (context) => const LoginScreen(),
                       ),
                     );
-                    // TODO: Arahkan ke halaman login
                   },
                   child: const Text(
                     'Login',
@@ -60,7 +59,7 @@ class LoginRegisterScreen extends StatelessWidget {
               ),
             ),
 
-            // Tombol Register (Card)
+            // Register 
             Positioned(
               left: 61,
               top: 530,
@@ -76,7 +75,6 @@ class LoginRegisterScreen extends StatelessWidget {
                     ),
                   ),
                   onPressed: () {
-                    // TODO: Arahkan ke halaman register
                     Navigator.push(
                       context,
                       MaterialPageRoute(

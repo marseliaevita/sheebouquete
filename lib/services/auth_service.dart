@@ -1,9 +1,10 @@
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:pos_app/models/users_model.dart';
 
 class AuthService {
   final SupabaseClient _supabase = Supabase.instance.client;
 
-  // Login
+  // LOGIN
   Future<User?> login({required String email, required String password}) async {
     final res = await _supabase.auth.signInWithPassword(
       email: email,
@@ -12,19 +13,17 @@ class AuthService {
     return res.user;
   }
 
-  // Register
+  // REGISTER
   Future<User?> register({
     required String name,
     required String email,
     required String password,
     required String role,
   }) async {
-    // 1️⃣ Daftar user di Supabase Auth
     final res = await _supabase.auth.signUp(email: email, password: password);
     final user = res.user;
     if (user == null) return null;
 
-    // 2️⃣ Masukkan data ke tabel 'users'
     await _supabase.from('users').insert({
       'user_id': user.id,
       'name': name,
@@ -34,4 +33,19 @@ class AuthService {
 
     return user;
   }
+
+  // LOGOUT
+  Future<void> logout() async {
+    await _supabase.auth.signOut();
+  }
+}
+
+// USER YANG LOGIN
+class CurrentUser {
+  static UserModel? _user;
+  static set user(UserModel? user) => _user = user;
+  static UserModel? get user => _user;
+
+  /// Hapus user saat logout
+  static void clear() => _user = null;
 }

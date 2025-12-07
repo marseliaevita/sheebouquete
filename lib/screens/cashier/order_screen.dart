@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:pos_app/widgets/card_order.dart';
+import 'package:pos_app/screens/cashier/struck_screen.dart';
 
 class OrderScreen extends StatefulWidget {
   final List<Map<String, dynamic>> cartItems;
+  final Map<String, dynamic>? customer;
 
-  const OrderScreen({super.key, required this.cartItems});
+  const OrderScreen({
+    super.key,
+    required this.cartItems,
+    required this.customer,
+  });
 
   @override
   State<OrderScreen> createState() => _OrderScreenState();
@@ -21,7 +27,7 @@ class _OrderScreenState extends State<OrderScreen> {
     cartItems = List.from(widget.cartItems);
   }
 
-  // ===================== SUBTOTAL =====================
+  // SUBTOTAL
   int getSubtotal() {
     int total = 0;
     for (var i in cartItems) {
@@ -41,7 +47,7 @@ class _OrderScreenState extends State<OrderScreen> {
       body: SafeArea(
         child: Column(
           children: [
-            // ================= HEADER
+            // HEADER
             Container(
               height: 100,
               padding: const EdgeInsets.only(top: 60, left: 18, right: 18),
@@ -76,22 +82,15 @@ class _OrderScreenState extends State<OrderScreen> {
 
             const SizedBox(height: 10),
 
-            // ===================== CUSTOMER
+            // CUSTOMER
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: ListView.builder(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: dummyCustomers.length,
-                itemBuilder: (context, index) {
-                  return CardCustomer(name: dummyCustomers[index]["name"]!);
-                },
-              ),
+              padding: const EdgeInsets.symmetric(horizontal: 18),
+              child: CardCustomer(name: widget.customer?['name'] ?? 'Guest'),
             ),
 
             const SizedBox(height: 8),
 
-            // ================= TITLE ITEM
+            // TITLE ITEM
             Container(
               width: double.infinity,
               alignment: Alignment.centerLeft,
@@ -108,7 +107,7 @@ class _OrderScreenState extends State<OrderScreen> {
 
             const SizedBox(height: 12),
 
-            // ================= LIST CARD
+            // LIST
             Expanded(
               child: ListView.builder(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -128,7 +127,7 @@ class _OrderScreenState extends State<OrderScreen> {
 
             const SizedBox(height: 5),
 
-            // ================= SUMMARY CARD
+            // SUMMARY CARD
             SummaryCard(
               subtotal: subtotal,
               discount: discount,
@@ -147,7 +146,7 @@ class _OrderScreenState extends State<OrderScreen> {
 
             const SizedBox(height: 20),
 
-            // ================= PAYMENT BUTTON =================
+            //  PAYMENT BUTTON
             Padding(
               padding: const EdgeInsets.fromLTRB(16, 0, 16, 24),
               child: SizedBox(
@@ -161,23 +160,29 @@ class _OrderScreenState extends State<OrderScreen> {
                     ),
                   ),
                   onPressed: selectedPayment.isEmpty
-    ? null   // tombol disable
-    : () {
-        showDialog(
-          context: context,
-          builder: (context) {
-            return ConfirmPaymentDialog(
-              customer: dummyCustomers[0]["name"]!,
-              itemCount: cartItems.length,
-              total: subtotal - discount,
-              paymentMethod: selectedPayment == "cash"
-                  ? "Cash"
-                  : "QRIS",
-            );
-          },
-        );
-      },
-
+                      ? null
+                      : () {
+                          showDialog(
+                            context: context,
+                            builder: (context) {
+                              return ConfirmPaymentDialog(
+                                customer: widget.customer?['name'] ?? 'Guest',
+                                itemCount: cartItems.length,
+                                total: subtotal - discount,
+                                paymentMethod: selectedPayment == "cash"
+                                    ? "Cash"
+                                    : "QRIS",
+                                cartItems: cartItems,
+                                onCancel: () {
+                                  Navigator.pop(context);
+                                  setState(() {
+                                    selectedPayment = "";
+                                  });
+                                },
+                              );
+                            },
+                          );
+                        },
 
                   child: const Text(
                     "Payment",
@@ -197,12 +202,14 @@ class _OrderScreenState extends State<OrderScreen> {
   }
 }
 
-//  ================== POPUP DELETE
+// POPUP CONFIRM
 class ConfirmPaymentDialog extends StatelessWidget {
   final String customer;
   final int itemCount;
   final int total;
   final String paymentMethod;
+  final VoidCallback onCancel;
+  final List<Map<String, dynamic>> cartItems;
 
   const ConfirmPaymentDialog({
     super.key,
@@ -210,6 +217,8 @@ class ConfirmPaymentDialog extends StatelessWidget {
     required this.itemCount,
     required this.total,
     required this.paymentMethod,
+    required this.cartItems,
+    required this.onCancel,
   });
 
   @override
@@ -249,14 +258,14 @@ class ConfirmPaymentDialog extends StatelessWidget {
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  // CANCEL BUTTON
+                  // CANCEL
                   SizedBox(
                     width: 112,
                     height: 42,
                     child: ElevatedButton(
-                      onPressed: () => Navigator.pop(context),
+                      onPressed: onCancel,
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFFB57D7B),
+                        backgroundColor: const Color(0xFFB53855),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(15),
                         ),
@@ -270,13 +279,25 @@ class ConfirmPaymentDialog extends StatelessWidget {
 
                   const SizedBox(width: 12),
 
-                  // CONFIRM BUTTON
+                  // CONFIRM
                   SizedBox(
                     width: 112,
                     height: 42,
                     child: ElevatedButton(
                       onPressed: () {
-                        Navigator.pop(context);
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => StructScreen(
+                              customerName: customer,
+                              paymentMethod: paymentMethod,
+                              total: total,
+                              cartItems: cartItems,
+                              transactionCode: 5431,
+                              date: DateTime.now(),
+                            ),
+                          ),
+                        );
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFF7A1A2F),

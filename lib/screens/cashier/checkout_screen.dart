@@ -1,26 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:pos_app/widgets/card_checkout.dart';
+import 'package:pos_app/services/cashier_service.dart';
 import 'package:pos_app/screens/cashier/order_screen.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class CheckoutScreen extends StatefulWidget {
-  const CheckoutScreen({super.key});
+  final List<Map<String, dynamic>> cartItems;
+  final Map<String, dynamic>? customer;
+
+  const CheckoutScreen({super.key, required this.cartItems, this.customer});
 
   @override
   State<CheckoutScreen> createState() => _CheckoutScreenState();
 }
 
 class _CheckoutScreenState extends State<CheckoutScreen> {
-  // Dummy cart data
-  List<Map<String, dynamic>> cartItems = [
-    {
-      "name": "Fresh Bouquet",
-      "price": 200000,
-      "qty": 2,
-      "image": "assets/images/fresh.jpg",
-    },
-  ];
+  late List<Map<String, dynamic>> cartItems;
+  final cashierService = CashierService();
 
-  // ===================== POPUP DELETE =====================
+  @override
+  void initState() {
+    super.initState();
+    cartItems = List.from(widget.cartItems);
+  }
+
   void _showDeleteDialog(int index) {
     showDialog(
       context: context,
@@ -54,9 +57,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                     color: Color(0xFF6A2E2E),
                   ),
                 ),
-
                 const SizedBox(height: 10),
-
                 const Center(
                   child: Text(
                     "You are sure to delete\nthe product?",
@@ -64,16 +65,14 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                     style: TextStyle(fontSize: 14, color: Color(0xFF6A2E2E)),
                   ),
                 ),
-
                 const Spacer(),
-
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     ElevatedButton(
                       onPressed: () => Navigator.pop(context),
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Color(0xFFB57D7B),
+                        backgroundColor: const Color(0xFFB57D7B),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),
                         ),
@@ -83,16 +82,14 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                         style: TextStyle(color: Colors.white),
                       ),
                     ),
-
                     const SizedBox(width: 8),
-
                     ElevatedButton(
                       onPressed: () {
                         setState(() => cartItems.removeAt(index));
                         Navigator.pop(context);
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Color(0xFF7A1A2F),
+                        backgroundColor: const Color(0xFF7A1A2F),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),
                         ),
@@ -112,13 +109,11 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     );
   }
 
-  // ===================== SUBTOTAL =====================
   int getSubtotal() {
-    int total = 0;
-    for (var i in cartItems) {
-      total += (i["price"] as int) * (i["qty"] as int);
-    }
-    return total;
+    return cartItems.fold(
+      0,
+      (sum, item) => sum + (item['price'] as int) * (item['qty'] as int),
+    );
   }
 
   @override
@@ -129,11 +124,10 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 
     return Scaffold(
       backgroundColor: Colors.white,
-
       body: SafeArea(
         child: Column(
           children: [
-            // ================= HEADER =================
+            // HEADER
             Container(
               height: 100,
               padding: const EdgeInsets.only(top: 60, left: 18, right: 18),
@@ -168,7 +162,6 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 
             const SizedBox(height: 25),
 
-            // ================= TEXT ITEM =================
             Container(
               width: double.infinity,
               alignment: Alignment.centerLeft,
@@ -185,48 +178,46 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 
             const SizedBox(height: 10),
 
-            // ================= LIST CARD =================
             Expanded(
-              child: ListView.builder(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                itemCount: cartItems.length,
-                itemBuilder: (context, index) {
-                  final item = cartItems[index];
-
-                  return CardCheckout(
-                    name: item["name"],
-                    image: item["image"],
-                    price: item["price"],
-                    qty: item["qty"],
-
-                    onDelete: () => _showDeleteDialog(index),
-
-                    onAddQty: () {
-                      setState(() {
-                        cartItems[index]["qty"]++;
-                      });
-                    },
-
-                    onRemoveQty: () {
-                      setState(() {
-                        if (cartItems[index]["qty"] > 1) {
-                          cartItems[index]["qty"]--;
-                        }
-                      });
-                    },
-                  );
-                },
-              ),
+              child: cartItems.isEmpty
+                  ? const Center(
+                      child: Text(
+                        "Your cart is empty",
+                        style: TextStyle(
+                          color: Color(0xFF761B2D),
+                          fontSize: 18,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    )
+                  : ListView.builder(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      itemCount: cartItems.length,
+                      itemBuilder: (context, index) {
+                        final item = cartItems[index];
+                        return CardCheckout(
+                          name: item["name"] ?? '',
+                          image: item["image"] ?? '',
+                          price: item["price"] as int,
+                          qty: item["qty"] as int,
+                          onDelete: () => _showDeleteDialog(index),
+                          onAddQty: () =>
+                              setState(() => cartItems[index]["qty"]++),
+                          onRemoveQty: () => setState(() {
+                            if (cartItems[index]["qty"] > 1)
+                              cartItems[index]["qty"]--;
+                          }),
+                        );
+                      },
+                    ),
             ),
 
             const SizedBox(height: 5),
 
-            // ================= SUMMARY CARD (dari widget) =================
             SummaryCard(subtotal: subtotal, discount: discount, tax: tax),
 
             const SizedBox(height: 20),
 
-            // ================= CHECKOUT =================
             Padding(
               padding: const EdgeInsets.fromLTRB(16, 0, 16, 24),
               child: SizedBox(
@@ -239,16 +230,47 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                       borderRadius: BorderRadius.circular(25),
                     ),
                   ),
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => OrderScreen(
-                          cartItems: cartItems, // sekarang aman
-                        ),
-                      ),
-                    );
-                  },
+                  onPressed: cartItems.isEmpty
+                      ? null
+                      : () async {
+                          final totalPrice = getSubtotal();
+                          final totalItem = cartItems.fold<int>(
+                            0,
+                            (s, i) => s + (i['qty'] as int),
+                          );
+
+                          try {
+                            final orderId = await cashierService.createOrder(
+                              totalPrice: totalPrice,
+                              totalItem: totalItem,
+                              customerId: widget.customer?['customer_id'],
+                              userId:
+                                  Supabase.instance.client.auth.currentUser!.id,
+                              paymentMethod: 'cash',
+                              cartItems: cartItems,
+                            );
+
+                            if (!mounted) return;
+
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => OrderScreen(
+                                  cartItems: cartItems,
+                                  customer: widget.customer,
+                                ),
+                              ),
+                            );
+                          } catch (e) {
+                            if (!mounted) return;
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text("Gagal: $e"),
+                                backgroundColor: Colors.red,
+                              ),
+                            );
+                          }
+                        },
                   child: const Text(
                     "Checkout",
                     style: TextStyle(

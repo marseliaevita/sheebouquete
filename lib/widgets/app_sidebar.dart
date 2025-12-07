@@ -1,4 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:pos_app/models/users_model.dart';
+
+
+class CurrentUser {
+  static UserModel? _user;
+  static UserModel? get user => _user;
+  static set user(UserModel? user) => _user = user;
+
+  static void clear() => _user = null;
+}
 
 class AppSidebar extends StatelessWidget {
   final Function(String) onMenuTap;
@@ -10,19 +20,32 @@ class AppSidebar extends StatelessWidget {
     required this.activeMenu,
   });
 
+  String _getInitials(String name) {
+    final names = name.trim().split(' ');
+    String initials = '';
+    for (var n in names.take(2)) {
+      if (n.isNotEmpty) initials += n[0].toUpperCase();
+    }
+    return initials.isEmpty ? '??' : initials;
+  }
+
   @override
   Widget build(BuildContext context) {
+    final user = CurrentUser.user;
+
+    final String displayName = user?.name ?? "Marselia";
+    final String displayRole = user?.role ?? "Admin";
+    final String initials = _getInitials(displayName);
+
     return Drawer(
-      width: 260, // ukuran drawer
+      width: 260,
       child: Container(
         padding: const EdgeInsets.all(16),
-        decoration: const BoxDecoration(
-          color: Color(0xFFFFE7EB),
-        ),
+        decoration: const BoxDecoration(color: Color(0xFFFFE7EB)),
         child: SingleChildScrollView(
           child: Column(
             children: [
-              // PROFILE
+              // PROFILE 
               Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
@@ -31,30 +54,39 @@ class AppSidebar extends StatelessWidget {
                 ),
                 child: Row(
                   children: [
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(50),
-                      child: Image.asset(
-                        "assets/images/user.jpg",
-                        width: 50,
-                        height: 50,
-                        fit: BoxFit.cover,
+                    // PROFILE INISIAL 
+                    Container(
+                      width: 50,
+                      height: 50,
+                      decoration: const BoxDecoration(
+                        color: Color(0xFFB84C69),
+                        shape: BoxShape.circle,
+                      ),
+                      alignment: Alignment.center,
+                      child: Text(
+                        initials,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18,
+                        ),
                       ),
                     ),
                     const SizedBox(width: 12),
-                    const Column(
+                    Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          "Marselia Evita",
-                          style: TextStyle(
+                          displayName,
+                          style: const TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 15,
                             color: Color(0xFF630E2B),
                           ),
                         ),
                         Text(
-                          "Admin",
-                          style: TextStyle(
+                          displayRole,
+                          style: const TextStyle(
                             fontSize: 13,
                             color: Color(0xFF7A3A4A),
                           ),
@@ -67,69 +99,48 @@ class AppSidebar extends StatelessWidget {
 
               const SizedBox(height: 20),
 
-              // MENU LIST
+              // MENU ITEMS
               _menuItem(
                 icon: Icons.dashboard,
                 title: "Dashboard",
                 isActive: activeMenu == "dashboard",
-                onTap: () {
-                  onMenuTap("dashboard");
-                  Navigator.pop(context); // tutup drawer
-                },
+                onTap: () => onMenuTap("dashboard"),
               ),
               _menuItem(
                 icon: Icons.category,
                 title: "Product",
                 isActive: activeMenu == "product",
-                onTap: () {
-                  onMenuTap("product");
-                  Navigator.pop(context);
-                },
+                onTap: () => onMenuTap("product"),
               ),
               _menuItem(
                 icon: Icons.shopping_bag,
                 title: "Cashier",
                 isActive: activeMenu == "cashier",
-                onTap: () {
-                  onMenuTap("cashier");
-                  Navigator.pop(context);
-                },
+                onTap: () => onMenuTap("cashier"),
               ),
               _menuItem(
                 icon: Icons.people,
                 title: "Customer",
                 isActive: activeMenu == "customer",
-                onTap: () {
-                  onMenuTap("customer");
-                  Navigator.pop(context);
-                },
+                onTap: () => onMenuTap("customer"),
               ),
               _menuItem(
                 icon: Icons.receipt_long,
                 title: "Report",
                 isActive: activeMenu == "report",
-                onTap: () {
-                  onMenuTap("report");
-                  Navigator.pop(context);
-                },
+                onTap: () => onMenuTap("report"),
               ),
               _menuItem(
                 icon: Icons.inventory,
                 title: "Stock",
                 isActive: activeMenu == "stock",
-                onTap: () {
-                  onMenuTap("stock");
-                  Navigator.pop(context);
-                },
+                onTap: () => onMenuTap("stock"),
               ),
               _menuItem(
-                icon: Icons.person,
-                title: "Account",
-                isActive: activeMenu == "account",
-                onTap: () {
-                  onMenuTap("account");
-                  Navigator.pop(context);
-                },
+                icon: Icons.logout,
+                title: "Logout",
+                isActive: activeMenu == "logout",
+                onTap: () => onMenuTap("logout"),
               ),
             ],
           ),

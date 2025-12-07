@@ -10,7 +10,7 @@ class DTransactionScreen extends StatelessWidget {
       body: SafeArea(
         child: Column(
           children: [
-            // ---------------- TOPBAR HEADER ----------------
+            // HEADER
             Container(
               height: 100,
               padding: const EdgeInsets.only(top: 60, left: 18, right: 18),
@@ -45,7 +45,7 @@ class DTransactionScreen extends StatelessWidget {
 
             const SizedBox(height: 25),
 
-            // ---------------- CONTENT ----------------
+            // CONTENT
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 18),
@@ -71,7 +71,7 @@ class DTransactionScreen extends StatelessWidget {
     );
   }
 
-  // ----------------- TRANSACTION TILE -----------------
+  // TRANSACTION
   Widget _transactionTile() {
     return Container(
       margin: const EdgeInsets.only(bottom: 20),
@@ -92,13 +92,12 @@ class DTransactionScreen extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // LEFT
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: const [
                 Padding(
-                  padding: EdgeInsets.only(left: 6), // geser nama ke kanan
+                  padding: EdgeInsets.only(left: 6), 
                   child: Text(
                     "Melati Tiara",
                     style: TextStyle(
@@ -112,7 +111,7 @@ class DTransactionScreen extends StatelessWidget {
                 SizedBox(height: 4),
 
                 Padding(
-                  padding: EdgeInsets.only(left: 6), // geser date ke kanan juga
+                  padding: EdgeInsets.only(left: 6), 
                   child: Text(
                     "8 Okt 2025 08.30 AM",
                     style: TextStyle(fontSize: 11, color: Colors.black54),
@@ -122,7 +121,6 @@ class DTransactionScreen extends StatelessWidget {
             ),
           ),
 
-          // RIGHT
           Column(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
