@@ -6,6 +6,7 @@ class CardCustomer extends StatelessWidget {
   final int totalSpent;
   final VoidCallback? onEdit;
   final VoidCallback? onTap;
+  final VoidCallback? onDelete;
 
   const CardCustomer({
     super.key,
@@ -14,86 +15,76 @@ class CardCustomer extends StatelessWidget {
     required this.totalSpent,
     this.onEdit,
     this.onTap,
+    this.onDelete,
   });
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
-      child: Container(
-        width: 396,
-        height: 91,
-        margin: const EdgeInsets.only(bottom: 15),
-        padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 18),
-        decoration: BoxDecoration(
-          color: const Color(0xFFF5D7DF),
-          borderRadius: BorderRadius.circular(20),
-          boxShadow: [
-            BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 5),
-          ],
-        ),
-
-        child: Row(
-          children: [
-            // Profile 
-            Container(
-              height: 76,
-              width: 76,
-              decoration: const BoxDecoration(
-                color: Colors.white,
-                shape: BoxShape.circle,
-              ),
-              alignment: Alignment.center,
-              child: Text(
-                name.isNotEmpty ? name[0].toUpperCase() : "",
-                style: const TextStyle(
-                  fontSize: 25,
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xFF8A0B38),
-                ),
-              ),
+      child: Stack(
+        children: [
+          // MAIN CARD
+          Container(
+            width: 396,
+            height: 91,
+            margin: const EdgeInsets.only(bottom: 15),
+            padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 18),
+            decoration: BoxDecoration(
+              color: const Color(0xFFF5D7DF),
+              borderRadius: BorderRadius.circular(20),
+              boxShadow: [
+                BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 5),
+              ],
             ),
-
-            const SizedBox(width: 14),
-
-            // Name + Order
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    name,
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  Text(
-                    "$orders Orders",
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: Colors.black.withOpacity(0.6),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-
-            // Price + Edit Icon
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
+            child: Row(
               children: [
-                GestureDetector(
-                  onTap: onEdit,
-                  child: const Icon(
-                    Icons.edit,
-                    size: 18,
-                    color: Color(0xFF8A0B38),
+                // Profile
+                Container(
+                  height: 76,
+                  width: 76,
+                  decoration: const BoxDecoration(
+                    color: Colors.white,
+                    shape: BoxShape.circle,
+                  ),
+                  alignment: Alignment.center,
+                  child: Text(
+                    name.isNotEmpty ? name[0].toUpperCase() : "",
+                    style: const TextStyle(
+                      fontSize: 25,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFF8A0B38),
+                    ),
                   ),
                 ),
 
-                const SizedBox(height: 5),
+                const SizedBox(width: 14),
 
+                // Name + orders
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        name,
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      Text(
+                        "$orders Orders",
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: Colors.black.withOpacity(0.6),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+
+                // Total spent
                 Text(
                   "Rp. ${totalSpent.toString().replaceAllMapped(
                         RegExp(r'(\d)(?=(\d{3})+(?!\d))'),
@@ -106,12 +97,55 @@ class CardCustomer extends StatelessWidget {
                 ),
               ],
             ),
-          ],
-        ),
+          ),
+
+          // EDIT ICON
+          Positioned(
+            top: 8,
+            right: 50,
+            child: GestureDetector(
+              onTap: onEdit,
+              child: Container(
+                padding: const EdgeInsets.all(6),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  shape: BoxShape.circle,
+                ),
+                child: const Icon(
+                  Icons.edit,
+                  size: 18,
+                  color: Color(0xFF8A0B38),
+                ),
+              ),
+            ),
+          ),
+
+          // DELETE ICON
+          Positioned(
+            top: 8,
+            right: 10,
+            child: GestureDetector(
+              onTap: onDelete,
+              child: Container(
+                padding: const EdgeInsets.all(6),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  shape: BoxShape.circle,
+                ),
+                child: const Icon(
+                  Icons.delete_outline,
+                  size: 20,
+                  color: Color(0xFF8A0B38),
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
 }
+
 
 
 

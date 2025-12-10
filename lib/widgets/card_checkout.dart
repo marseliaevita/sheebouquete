@@ -47,7 +47,7 @@ class CardCheckout extends StatelessWidget {
                   borderRadius: BorderRadius.circular(15),
                   child: const Center(
                     child: Icon(
-                      Icons.delete,
+                      Icons.delete_outline_outlined,
                       size: 35,
                       color: Color(0xFF630E2B),
                     ),

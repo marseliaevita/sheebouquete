@@ -73,7 +73,7 @@ class DashboardScreen extends StatelessWidget {
                         );
                       },
                       child: _buildStatCard(
-                      icon: Icons.shopping_bag,
+                      icon: Icons.discount_rounded,
                       number: "6",
                       text: "Product",
                     ),

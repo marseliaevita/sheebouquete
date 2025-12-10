@@ -141,7 +141,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                       child: GestureDetector(
                         onTap: () => Navigator.pop(context),
                         child: const Icon(
-                          Icons.arrow_back,
+                          Icons.arrow_back_ios,
                           size: 25,
                           color: Color(0xFF761B2D),
                         ),

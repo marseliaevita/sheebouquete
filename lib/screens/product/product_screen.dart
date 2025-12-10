@@ -220,7 +220,7 @@ class _ProductScreenState extends State<ProductScreen> {
               const SizedBox(width: 10),
               GestureDetector(
                 onTap: () => _showDeleteDialog(p["product_id"]),
-                child: const Icon(Icons.delete,
+                child: const Icon(Icons.delete_outline_outlined,
                     size: 18, color: Color(0xFF630E2B)),
               ),
             ],

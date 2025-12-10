@@ -101,13 +101,13 @@ class AppSidebar extends StatelessWidget {
 
               // MENU ITEMS
               _menuItem(
-                icon: Icons.dashboard,
+                icon: Icons.dashboard_rounded,
                 title: "Dashboard",
                 isActive: activeMenu == "dashboard",
                 onTap: () => onMenuTap("dashboard"),
               ),
               _menuItem(
-                icon: Icons.category,
+                icon: Icons.discount_rounded,
                 title: "Product",
                 isActive: activeMenu == "product",
                 onTap: () => onMenuTap("product"),
@@ -131,7 +131,7 @@ class AppSidebar extends StatelessWidget {
                 onTap: () => onMenuTap("report"),
               ),
               _menuItem(
-                icon: Icons.inventory,
+                icon: Icons.add_business_rounded,
                 title: "Stock",
                 isActive: activeMenu == "stock",
                 onTap: () => onMenuTap("stock"),

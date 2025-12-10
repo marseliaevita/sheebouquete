@@ -247,84 +247,44 @@ class _CustomerScreenState extends State<CustomerScreen> {
                         itemCount: filteredCustomers.length,
                         itemBuilder: (context, index) {
                           final c = filteredCustomers[index];
-                          return Stack(
-                            children: [
-                              CardCustomer(
-                                name: c['name'] ?? '-',
-                                orders: c['orders'] ?? 0,
-                                totalSpent: c['total_spent'] ?? 0,
-                                onTap: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (_) => CustomerHistoryScreen(
-                                        customer: {
-                                          "name": c['name'],
-                                          "phone": c['phone'] ?? "-",
-                                          "address": c['address'] ?? '-',
-                                        },
-                                      ),
-                                    ),
-                                  );
-                                },
-                              ),
 
-                              // ICON EDIT
-                              Positioned(
-                                top: 14,
-                                right: 44,
-                                child: GestureDetector(
-                                  onTap: () {
-                                    showDialog(
-                                      context: context,
-                                      barrierDismissible: false,
-                                      builder: (_) => EditCustomerPopup(
-                                        customer: c,
-                                        onUpdated: fetchCustomers,
-                                      ),
-                                    );
-                                  },
-                                  child: Container(
-                                    padding: const EdgeInsets.all(6),
-                                    decoration: BoxDecoration(
-                                      color: Colors.white.withOpacity(0.7),
-                                      shape: BoxShape.circle,
-                                    ),
-                                    child: const Icon(
-                                      Icons.edit,
-                                      size: 18,
-                                      color: Color(0xFF8A0B38),
-                                    ),
+                          return CardCustomer(
+                            name: c['name'] ?? '-',
+                            orders: c['orders'] ?? 0,
+                            totalSpent: c['total_spent'] ?? 0,
+
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) => CustomerHistoryScreen(
+                                    customer: {
+                                      "name": c['name'],
+                                      "phone": c['phone'] ?? "-",
+                                      "address": c['address'] ?? '-',
+                                    },
                                   ),
                                 ),
-                              ),
+                              );
+                            },
 
-                              // ICON DELETE
-                              Positioned(
-                                top: 8,
-                                right: 8,
-                                child: GestureDetector(
-                                  onTap: () {
-                                    _showDeleteDialog(
-                                      c['customer_id'] as int,
-                                      c['name'] ?? 'Customer',
-                                    );
-                                  },
-                                  child: Container(
-                                    padding: const EdgeInsets.all(6),
-                                    decoration: BoxDecoration(
-                                      color: Colors.red.withOpacity(0.1),
-                                      shape: BoxShape.circle,
-                                    ),
-                                    child: const Icon(
-                                      Icons.delete_outline,
-                                      color: Colors.red,
-                                      size: 20,
-                                    ),
-                                  ),
+                            onEdit: () {
+                              showDialog(
+                                context: context,
+                                barrierDismissible: false,
+                                builder: (_) => EditCustomerPopup(
+                                  customer: c,
+                                  onUpdated: fetchCustomers,
                                 ),
-                              ),
-                            ],
+                              );
+                            },
+
+                            onDelete: () {
+                              _showDeleteDialog(
+                                c['customer_id'] as int,
+                                c['name'] ?? 'Customer',
+                              );
+                            },
                           );
                         },
                       ),

@@ -1,0 +1,23 @@
+[33mcommit 637fcb6ee40eefcf21f7c1eca3f40f34fa6d69db[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m)[m
+Author: marseliaevita <cameliaevita614@gmail.com>
+Date:   Sun Dec 7 21:08:49 2025 +0700
+
+    3 Setup Login/Logout, Product, Customer, Stock
+
+[33mcommit 1bd353f170fb79618db1d868479f3d63b4a8bcbd[m[33m ([m[1;31morigin/main[m[33m)[m
+Author: marseliaevita <cameliaevita614@gmail.com>
+Date:   Sun Nov 30 12:47:52 2025 +0700
+
+    2 UI
+
+[33mcommit 250c416828e290fbba11bfbfd8fb2de512fce3dc[m
+Author: marseliaevita <cameliaevita614@gmail.com>
+Date:   Wed Nov 12 07:49:52 2025 +0700
+
+    1 Setup flutter & supabase connection
+
+[33mcommit a443286f86c0d431b991b848945a55f3245a4ac4[m
+Author: marseliaevita <cameliaevita614@gmail.com>
+Date:   Wed Nov 12 07:45:04 2025 +0700
+
+    1 Setup flutter & supabase connection
